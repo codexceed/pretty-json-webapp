@@ -1,9 +1,13 @@
 {% extends "homepage.html" %}
 
 {% block content %}
-    <form method="post">
-        <textarea id="json-input", rows="100", cols="100"></textarea>
-        <textarea id="json-output", rows="100", cols="100"></textarea>
-        <input type="submit", value="Prettify">
+    <form action="{{ url_for('prettify_json') }}" method="post">
+        <textarea id="json-input" name="json-input" rows="100" cols="100"></textarea>
+        <input type="submit" value="Prettify">
     </form>
+    {% if json_output %}
+    <textarea id="json-output" name="json-output" rows="100" cols="100">{{ json_output }}</textarea>
+    {% else %}
+    <textarea id="json-output" name="json-output" rows="100" cols="100"></textarea>
+    {% endif %}
 {% endblock %}
