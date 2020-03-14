@@ -1,4 +1,4 @@
-import json
+from json import loads, dumps, JSONDecodeError
 
 
 class InvalidInput(Exception):
@@ -17,9 +17,9 @@ def prettify(text: str) -> str:
     """
     pretty_text = ""
     try:
-        json_obj = json.loads(text)
-        pretty_text = json.dumps(json_obj, indent=2, sort_keys=True)
-    except json.JSONDecodeError as e:
+        json_obj = loads(text)
+        pretty_text = dumps(json_obj, indent=2, sort_keys=True)
+    except (JSONDecodeError, TypeError) as e:
         InvalidInput(e)
 
     return pretty_text
