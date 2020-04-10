@@ -1,20 +1,32 @@
-from flask import render_template, request, redirect, url_for
+from typing import Any
+
+from flask import redirect, render_template, url_for
+from flask_request_validator import FORM, Param, validate_params
 
 from json_app import app
 from json_app.constants import HOME_TITLE
-from json_app.parse_json import prettify
+from json_app.parse_json.parser import prettify
 
 
-@app.route('/')
+@app.route("/")
 def index() -> str:
     """Pretty-json webpage endpoint."""
-    x = request.args
-    return redirect(url_for('prettify_json'))
+    return redirect(url_for("get_pretty_json"))
 
 
-@app.route('/prettify-json', methods=['POST', 'GET'])
-def prettify_json() -> str:
+@app.route("/prettify-json", methods=["GET"])
+def get_pretty_json() -> Any:
+    """Return the prettyjson webpage."""
+    return render_template("prettyjson.html", title=HOME_TITLE)
+
+
+@app.route("/prettify-json", methods=["POST"])
+@validate_params(Param("json-input", FORM, str))
+def prettify_json(json_input: str) -> Any:
     """Return prettified json text."""
-    json_input = request.args.get('json-input')
-    json_output = prettify(text=json_input)
-    return render_template('prettyjson.html', title=HOME_TITLE, json_output=json_output)
+    try:
+        json_output = prettify(text=json_input)
+    except Exception:
+        return "Invalid json string.", 400
+
+    return render_template("prettyjson.html", title=HOME_TITLE, json_output=json_output)

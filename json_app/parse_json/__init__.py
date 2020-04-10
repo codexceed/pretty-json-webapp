@@ -1,1 +1,0 @@
-from json_app.parse_json.parser import prettify
