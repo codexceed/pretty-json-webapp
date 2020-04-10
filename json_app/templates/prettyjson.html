@@ -1,7 +1,7 @@
 {% extends "homepage.html" %}
 
 {% block content %}
-    <form>
+    <form action="{{ url_for('prettify_json') }}" method="POST">
         <textarea id="json-input" name="json-input" rows="100" cols="100"></textarea>
         {% if json_output %}
         <textarea id="json-output" name="json-output" rows="100" cols="100">{{ json_output }}</textarea>
@@ -10,25 +10,4 @@
         {% endif %}
         <input type="submit" value="Prettify" id="prettify-button">
     </form>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script>
-        $("#prettify-button").click(function(){
-            var json_input = $("json-input").val();
-
-            $.ajax({
-            url: "{{ url_for('prettify_json') }}"
-            type: "post",
-            data: json_input,
-            success: function(response) {
-                $("json-output").val(response);
-            },
-            error: function(xhr) {console.log("error. see details below.");
-            console.log(xhr.status + ": " + xhr.responseText);
-            toast_error_msg = "An error occured";
-            toast_category = "danger";
-            },
-            });
-        });
-    </script>
 {% endblock %}
