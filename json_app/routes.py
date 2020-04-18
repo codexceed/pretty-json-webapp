@@ -1,7 +1,9 @@
+"""Defines API endpoints."""
 from typing import Any
 
 from flask import redirect, render_template, url_for
 from flask_request_validator import FORM, Param, validate_params
+from werkzeug import Response
 
 from json_app import app
 from json_app.constants import HOME_TITLE
@@ -9,7 +11,7 @@ from json_app.parse_json.parser import prettify
 
 
 @app.route("/")
-def index() -> str:
+def index() -> Response:
     """Pretty-json webpage endpoint."""
     return redirect(url_for("get_pretty_json"))
 

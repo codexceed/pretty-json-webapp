@@ -1,7 +1,10 @@
+"""Implementation of json parsing functions."""
 from json import JSONDecodeError, dumps, loads
 
 
 class InvalidInput(Exception):
+    """Custom exception for invalid json input."""
+
     pass
 
 
@@ -15,7 +18,6 @@ def prettify(text: str) -> str:
     Returns:
         Pretty text.
     """
-    pretty_text = ""
     try:
         json_obj = loads(text)
         pretty_text = dumps(json_obj, indent=2, sort_keys=True)

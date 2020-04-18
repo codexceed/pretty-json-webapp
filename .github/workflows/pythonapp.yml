@@ -1,0 +1,61 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Pretty Json Webapp
+
+env:
+  APP_DIR: json_app
+  CODECOV_TOKEN: ae5dd5e7-2b47-42c9-82da-e9061ce031db
+
+on: [push, pull_request]
+
+jobs:
+  code_quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install Linters
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 black isort mypy pydocstyle bandit
+      - name: Run black
+        run: black --check $APP_DIR
+      - name: Run isort
+        run: isort -c -rc @APP_DIR
+      - name: Run flake8
+        run: flake8 s $APP_DIR
+      - name: Run mypy
+        run: mypy $APP_DIR
+      - name: Run pydocstyle
+        run: pydocstyle $APP_DIR
+      - name: Run bandit
+        run: bandit $APP_DIR
+
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Test with pytest
+      run: |
+        pip install pytest pytest-mock
+        pytest tests
+    - name: Generate test coverage report
+      run: |
+        pip install pytest-cov codecov
+        pytest --cov-report=xml --cov=json_app tests/
+        codecov
