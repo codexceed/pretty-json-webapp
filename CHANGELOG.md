@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2
+### Added
+- New workflow file, namely, `build.yml` for building and publishing docker image.
+
 ## 0.2.0
 ### Added
 - `Dockerfile` that serves the app using `gunicorn`
