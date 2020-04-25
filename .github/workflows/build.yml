@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Extract version from tag
+      - name: Build and push docker image
         run: |
           IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
 
@@ -32,11 +32,11 @@ jobs:
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
 
-      - name: Build image
-        run: echo $IMAGE_ID:$VERSION
+          # Build the image
+          docker build . --file Dockerfile --tag "$IMAGE_ID:$VERSION"
 
-      - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+          # Login to docker registry
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
-      - name: Push image
-        run: docker push $IMAGE_ID:$VERSION
+          # Push the image
+          docker push $IMAGE_ID:$VERSION
