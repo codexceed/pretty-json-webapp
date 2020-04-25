@@ -32,9 +32,12 @@ jobs:
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
 
+          # Set vars in environment
+          echo ::set-env name=IMAGE_ID::$IMAGE_ID
+          echo ::set-env name=VERSION::$VERSION
+
       - name: Build image
-        run: |
-          echo $IMAGE_ID:$VERSION
+        run: docker build . --file Dockerfile --tag "$IMAGE_ID:$VERSION"
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
