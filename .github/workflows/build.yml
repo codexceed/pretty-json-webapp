@@ -33,9 +33,7 @@ jobs:
           echo VERSION=$VERSION
 
       - name: Build image
-        run: |
-          echo $IMAGE_ID:$VERSION
-          docker build . --file Dockerfile --tag "$IMAGE_ID:$VERSION"
+        run: echo $IMAGE_ID:$VERSION
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
