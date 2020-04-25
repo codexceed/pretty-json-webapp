@@ -24,7 +24,7 @@ jobs:
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
 
           # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed 's/[A-z\/]*//g')
+          VERSION=$(echo "${{ github.ref }}" | sed 's/^[A-z\/]*//g')
 
           # Use Docker `latest` tag convention
           [ "$VERSION" == "master" ] && VERSION=latest
